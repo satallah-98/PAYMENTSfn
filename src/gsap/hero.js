@@ -4,7 +4,8 @@ export function initHero() {
   const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
   tl.from('.nav', { y: -20, opacity: 0, duration: 0.5 })
-  tl.from('.hero-eyebrow', { y: 14, opacity: 0, duration: 0.55 }, '-=0.1')
+  tl.from('.hero-sponsor', { y: 10, opacity: 0, duration: 0.5 }, '-=0.1')
+  tl.from('.hero-eyebrow', { y: 14, opacity: 0, duration: 0.55 }, '-=0.2')
   tl.from(
     '.hero-headline .line',
     { clipPath: 'inset(100% 0 0 0)', y: '100%', stagger: 0.1, duration: 1.0, ease: 'power3.out' },

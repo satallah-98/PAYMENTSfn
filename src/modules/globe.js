@@ -3,6 +3,20 @@ import gsap from 'gsap'
 
 const ACCENT = 0xff8a3d
 
+/* Evenly-spaced subset of the fibonacci sphere — accent dots sit on the same grid as base dots */
+function fibonacciSubset(totalCount, subsetCount, radius) {
+  const all = fibonacciSphere(totalCount, radius)
+  const step = Math.floor(totalCount / subsetCount)
+  const positions = new Float32Array(subsetCount * 3)
+  for (let i = 0; i < subsetCount; i++) {
+    const src = i * step
+    positions[i * 3]     = all[src * 3]
+    positions[i * 3 + 1] = all[src * 3 + 1]
+    positions[i * 3 + 2] = all[src * 3 + 2]
+  }
+  return positions
+}
+
 /* Fibonacci sphere — even distribution of N points on a unit sphere */
 function fibonacciSphere(count, radius) {
   const positions = new Float32Array(count * 3)
@@ -53,7 +67,7 @@ export function initGlobe({ reduceMotion }) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100)
-  camera.position.z = 3.0
+  camera.position.z = 3.5
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -85,6 +99,18 @@ export function initGlobe({ reduceMotion }) {
       new THREE.PointsMaterial({ color: 0xe4e3de, size: 0.012, transparent: true, opacity: 0.6 })
     )
   )
+
+  /* Sparse orange accent dots — two layers (halo + core) for a glow effect */
+  const accentGeo = new THREE.BufferGeometry()
+  accentGeo.setAttribute('position', new THREE.BufferAttribute(fibonacciSubset(3000, 110, 1.003), 3))
+  globe.add(new THREE.Points(accentGeo, new THREE.PointsMaterial({
+    color: ACCENT, size: 0.05, transparent: true, opacity: 0.18,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  })))
+  globe.add(new THREE.Points(accentGeo, new THREE.PointsMaterial({
+    color: ACCENT, size: 0.016, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  })))
 
   globe.add(
     new THREE.LineSegments(
