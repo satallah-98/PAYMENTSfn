@@ -197,8 +197,6 @@ h1, h2, h3 { font-weight: var(--w-regular); }
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  /* clip only at the hero's bottom edge; top and sides bleed freely */
-  clip-path: inset(-100px -50vw 0 -50vw);
 }
 .hero-grid {
   flex: 1;
@@ -274,7 +272,7 @@ h1, h2, h3 { font-weight: var(--w-regular); }
   .hero-grid {
     grid-template-columns: 1.1fr 0.9fr;
     gap: 2rem;
-    overflow: visible;
+    overflow: hidden;
   }
   .hero-globe { height: 100%; min-height: 70vh; overflow: visible; }
 }
